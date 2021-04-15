@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final _titulosList = [
     "Deportes",
     "Mis noticias",
-    "???",
+    "Agregar noticia",
   ];
   final _pagesList = [
     NoticiasDeportes(),
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             label: "${_titulosList[1]}",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
+            icon: Icon(Icons.add),
             label: "${_titulosList[2]}",
           ),
         ],
