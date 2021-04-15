@@ -10,7 +10,7 @@ class NoticiasDeportes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: NewsRepository().getAvailableNoticias("sports"),
+        future: NewsRepository().getAvailableNoticias("futbol"),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(

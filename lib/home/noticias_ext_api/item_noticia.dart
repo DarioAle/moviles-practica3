@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_login/models/new.dart';
 
@@ -16,10 +17,11 @@ class ItemNoticia extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: Image.network(
-                  "${noticia.urlToImage}",
-                  height: 100,
-                  fit: BoxFit.cover,
+                child: ExtendedImage.network(
+                  noticia.urlToImage,
+                  cache: true,
+                  height: 150,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
               Expanded(
