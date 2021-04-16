@@ -128,7 +128,8 @@ class _ItemNoticiaState extends State<ItemNoticia> {
                               title: widget.noticia.title,
                               description: (widget.noticia.description ??
                                   "Descripcion no disponible"),
-                              publishedAt: widget.noticia.publishedAt)));
+                              publishedAt: widget.noticia.publishedAt,
+                              urlToImage: widget.noticia.urlToImage)));
                     },
                   ),
                   IconButton(

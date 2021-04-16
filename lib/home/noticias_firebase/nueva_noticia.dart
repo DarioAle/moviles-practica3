@@ -110,12 +110,14 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
             SizedBox(height: 16),
             MaterialButton(
               child: Text("Imagen"),
+              color: Colors.blueGrey,
               onPressed: () {
                 newsBloc.add(PickImageEvent());
               },
             ),
             MaterialButton(
               child: Text("Guardar"),
+              color: Colors.blueGrey,
               onPressed: () {
                 newsBloc.add(
                   SaveNewElementEvent(
