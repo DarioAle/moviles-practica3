@@ -6,14 +6,14 @@ import 'package:google_login/models/new.dart';
 
 import 'bloc/my_news_bloc.dart';
 
-class PantallaTres extends StatefulWidget {
-  PantallaTres({Key key}) : super(key: key);
+class NuevaNoticia extends StatefulWidget {
+  NuevaNoticia({Key key}) : super(key: key);
 
   @override
-  _PantallaTresState createState() => _PantallaTresState();
+  _NuevaNoticiaState createState() => _NuevaNoticiaState();
 }
 
-class _PantallaTresState extends State<PantallaTres> {
+class _NuevaNoticiaState extends State<NuevaNoticia> {
   MyNewsBloc newsBloc;
   File slectedImage;
   var autorTc = TextEditingController();
