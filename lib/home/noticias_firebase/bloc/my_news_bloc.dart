@@ -40,7 +40,7 @@ class MyNewsBloc extends Bloc<MyNewsEvent, MyNewsState> {
       if (imageUrl != null) {
         yield LoadingState();
         await _saveNoticias(event.noticia.copyWith(urlToImage: imageUrl));
-        // yield LoadedNewsState(noticiasList: await _getNoticias() ?? []);
+        yield LoadedNewsState(noticiasList: await _getNoticias() ?? []);
         yield SavedNewState();
       } else {
         yield ErrorMessageState(errorMsg: "No se pudo guardar la imagen");
@@ -75,6 +75,7 @@ class MyNewsBloc extends Bloc<MyNewsEvent, MyNewsState> {
 
   Future<bool> _saveNoticias(New noticia) async {
     try {
+      print(noticia.toJson());
       await _cFirestore.collection("noticias").add(noticia.toJson());
       return true;
     } catch (e) {
@@ -93,10 +94,10 @@ class MyNewsBloc extends Bloc<MyNewsEvent, MyNewsState> {
           .map(
             (element) => New(
               author: element["author"],
+              description: element["description"],
               title: element["title"],
               urlToImage: element["urlToImage"],
-              description: element["description"],
-              // source: element["source"],
+              url: element["url"],
               publishedAt: DateTime.parse(element["publishedAt"]),
             ),
           )

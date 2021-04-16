@@ -3,14 +3,14 @@ import 'package:google_login/utils/news_repository.dart';
 
 import 'item_noticia.dart';
 
-class NoticiasDeportes extends StatelessWidget {
-  const NoticiasDeportes({Key key}) : super(key: key);
+class ListadoNoticias extends StatelessWidget {
+  const ListadoNoticias({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: NewsRepository().getAvailableNoticias("sports"),
+        future: NewsRepository().getAvailableNoticias("futbol"),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(

@@ -1,13 +1,61 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_login/home/noticias_firebase/bloc/my_news_bloc.dart';
 import 'package:google_login/models/new.dart';
+import 'package:share/share.dart';
 
-class ItemNoticia extends StatelessWidget {
+class ItemNoticia extends StatefulWidget {
   final New noticia;
   ItemNoticia({Key key, @required this.noticia}) : super(key: key);
 
   @override
+  _ItemNoticiaState createState() => _ItemNoticiaState();
+}
+
+class _ItemNoticiaState extends State<ItemNoticia> {
+  MyNewsBloc newsBloc;
+
+  @override
   Widget build(BuildContext context) {
-// TODO: Cambiar image.network por Extended Image con place holder en caso de error o mientras descarga la imagen
+    return BlocProvider(
+      create: (context) {
+        newsBloc = MyNewsBloc();
+        return newsBloc;
+      },
+      child: BlocConsumer<MyNewsBloc, MyNewsState>(
+        listener: (context, state) {
+          if (state is SavedNewState) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text("Noticia guardada.."),
+                ),
+              );
+          } else if (state is ErrorMessageState) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text("Error al guardar noticia"),
+                ),
+              );
+          }
+        },
+        builder: (context, state) {
+          if (state is LoadingState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return _createItem();
+        },
+      ),
+    );
+  }
+
+  Widget _createItem() {
     return Container(
       child: Padding(
         padding: EdgeInsets.all(6.0),
@@ -16,10 +64,11 @@ class ItemNoticia extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: Image.network(
-                  "${noticia.urlToImage}",
-                  height: 100,
-                  fit: BoxFit.cover,
+                child: ExtendedImage.network(
+                  widget.noticia.urlToImage,
+                  cache: true,
+                  height: 150,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
               Expanded(
@@ -31,7 +80,7 @@ class ItemNoticia extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "${noticia.title}",
+                        "${widget.noticia.title}",
                         maxLines: 1,
                         overflow: TextOverflow.clip,
                         style: TextStyle(
@@ -40,7 +89,7 @@ class ItemNoticia extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${noticia.publishedAt}",
+                        "${widget.noticia.publishedAt}",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           color: Colors.grey,
@@ -49,13 +98,13 @@ class ItemNoticia extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        "${noticia.description ?? "Descripcion no disponible"}",
+                        "${widget.noticia.description ?? "Descripcion no disponible"}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 16),
                       Text(
-                        "${noticia.author ?? "Autor no disponible"}",
+                        "${widget.noticia.author ?? "Autor no disponible"}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -67,10 +116,42 @@ class ItemNoticia extends StatelessWidget {
                   ),
                 ),
               ),
+              Expanded(
+                child: Column(children: [
+                  IconButton(
+                    icon: Icon(Icons.cloud_upload),
+                    onPressed: () {
+                      newsBloc.add(SaveNewElementEvent(
+                          noticia: New(
+                              author: (widget.noticia.author ??
+                                  "Autor no disponible"),
+                              title: widget.noticia.title,
+                              description: (widget.noticia.description ??
+                                  "Descripcion no disponible"),
+                              publishedAt: widget.noticia.publishedAt,
+                              urlToImage: widget.noticia.urlToImage)));
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    onPressed: () {
+                      _onShare(context, widget.noticia);
+                    },
+                  ),
+                ]),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  _onShare(BuildContext context, New noticia) async {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final itemToShare = "${noticia.title} ${noticia.url}";
+    await Share.share(itemToShare,
+        subject: noticia.description,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 }

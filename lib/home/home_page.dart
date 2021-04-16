@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_login/bloc/auth_bloc.dart';
 import 'package:google_login/home/noticias_firebase/mis_noticias.dart';
-import 'noticias_ext_api/noticias_deportes.dart';
-import 'package:google_login/home/noticias_firebase/pantalla_tres.dart';
+import 'noticias_ext_api/listado_noticias.dart';
+import 'package:google_login/home/noticias_firebase/nueva_noticia.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -15,14 +15,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentPageIndex = 0;
   final _titulosList = [
-    "Deportes",
+    "Noticias",
     "Mis noticias",
-    "???",
+    "Agregar noticia",
   ];
   final _pagesList = [
-    NoticiasDeportes(),
+    ListadoNoticias(),
     MisNoticias(),
-    PantallaTres(),
+    NuevaNoticia(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.sports_kabaddi),
+            icon: Icon(Icons.new_releases_sharp),
             label: "${_titulosList[0]}",
           ),
           BottomNavigationBarItem(
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             label: "${_titulosList[1]}",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
+            icon: Icon(Icons.add),
             label: "${_titulosList[2]}",
           ),
         ],
