@@ -45,8 +45,9 @@ class _MisNoticiasState extends State<MisNoticias> {
                   return ItemNoticia(noticia: state.noticiasList[index]);
                 },
               ),
-              onRefresh: () {
-                // TODO: call firebase to get news
+              onRefresh: () async {
+                BlocProvider.of<MyNewsBloc>(context).add(RequestAllNewsEvent());
+                return;
               },
             );
           }

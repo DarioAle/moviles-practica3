@@ -93,10 +93,10 @@ class MyNewsBloc extends Bloc<MyNewsEvent, MyNewsState> {
           .map(
             (element) => New(
               author: element["author"],
+              description: element["description"],
               title: element["title"],
               urlToImage: element["urlToImage"],
-              description: element["description"],
-              // source: element["source"],
+              url: element["url"],
               publishedAt: DateTime.parse(element["publishedAt"]),
             ),
           )
