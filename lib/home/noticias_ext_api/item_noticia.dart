@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_login/models/new.dart';
+import 'package:share/share.dart';
 
 class ItemNoticia extends StatelessWidget {
   final New noticia;
@@ -8,7 +9,6 @@ class ItemNoticia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-// TODO: Cambiar image.network por Extended Image con place holder en caso de error o mientras descarga la imagen
     return Container(
       child: Padding(
         padding: EdgeInsets.all(6.0),
@@ -69,10 +69,26 @@ class ItemNoticia extends StatelessWidget {
                   ),
                 ),
               ),
+              Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    _onShare(context, noticia);
+                  },
+                ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  _onShare(BuildContext context, New noticia) async {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final itemToShare = "${noticia.title} ${noticia.url}";
+    await Share.share(itemToShare,
+        subject: noticia.description,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 }
