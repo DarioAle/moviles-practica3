@@ -21,52 +21,49 @@ class _MisNoticiasState extends State<MisNoticias> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MyNewsBloc()..add(RequestAllNewsEvent()),
-      child: BlocConsumer<MyNewsBloc, MyNewsState>(
-        listener: (context, state) {
-          if (state is LoadingState) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text("Cargando..."),
-                ),
-              );
-          } else if (state is ErrorMessageState) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text("${state.errorMsg}"),
-                ),
-              );
-          }
-        },
-        builder: (context, state) {
-          if (state is LoadedNewsState) {
-            state.noticiasList
-                .sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
-            // state.noticiasList.forEach((element) {
-            //   print("-----" + element.publishedAt.toString());
-            //   print("");
-            //   });
-            return RefreshIndicator(
-              child: ListView.builder(
-                itemCount: state.noticiasList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ItemNoticia(noticia: state.noticiasList[index]);
-                },
+    return BlocConsumer<MyNewsBloc, MyNewsState>(
+      listener: (context, state) {
+        if (state is LoadingState) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text("Cargando..."),
               ),
-              onRefresh: () async {
-                BlocProvider.of<MyNewsBloc>(context).add(RequestAllNewsEvent());
-                return;
-              },
             );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+        } else if (state is ErrorMessageState) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text("${state.errorMsg}"),
+              ),
+            );
+        }
+      },
+      builder: (context, state) {
+        if (state is LoadedNewsState) {
+          state.noticiasList
+              .sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+          // state.noticiasList.forEach((element) {
+          //   print("-----" + element.publishedAt.toString());
+          //   print("");
+          //   });
+          return RefreshIndicator(
+            child: ListView.builder(
+              itemCount: state.noticiasList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ItemNoticia(noticia: state.noticiasList[index]);
+              },
+            ),
+            onRefresh: () async {
+              BlocProvider.of<MyNewsBloc>(context).add(RequestAllNewsEvent());
+              return;
+            },
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }
