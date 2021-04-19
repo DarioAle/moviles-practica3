@@ -1,7 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_login/home/noticias_firebase/bloc/my_news_bloc.dart';
+
+import 'package:google_login/home/nueva_noticia/bloc/crear_noticias_bloc.dart';
 import 'package:google_login/models/new.dart';
 import 'package:share/share.dart';
 
@@ -14,16 +15,16 @@ class ItemNoticia extends StatefulWidget {
 }
 
 class _ItemNoticiaState extends State<ItemNoticia> {
-  MyNewsBloc newsBloc;
+  CrearNoticiasBloc newsBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        newsBloc = MyNewsBloc();
+        newsBloc = CrearNoticiasBloc();
         return newsBloc;
       },
-      child: BlocConsumer<MyNewsBloc, MyNewsState>(
+      child: BlocConsumer<CrearNoticiasBloc, CrearNoticiasState>(
         listener: (context, state) {
           if (state is SavedNewState) {
             ScaffoldMessenger.of(context)

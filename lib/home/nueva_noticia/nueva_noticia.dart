@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_login/home/nueva_noticia/bloc/crear_noticias_bloc.dart';
 import 'package:google_login/models/new.dart';
-
-import 'bloc/my_news_bloc.dart';
+import 'package:google_login/home/noticias_firebase/bloc/my_news_bloc.dart' as newsBloc;
 
 class NuevaNoticia extends StatefulWidget {
   NuevaNoticia({Key key}) : super(key: key);
@@ -14,7 +14,7 @@ class NuevaNoticia extends StatefulWidget {
 }
 
 class _NuevaNoticiaState extends State<NuevaNoticia> {
-  MyNewsBloc newsBloc;
+  CrearNoticiasBloc _crearNoticiasBloc;
   File slectedImage;
   var autorTc = TextEditingController();
   var tituloTc = TextEditingController();
@@ -24,10 +24,10 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        newsBloc = MyNewsBloc();
-        return newsBloc;
+        _crearNoticiasBloc = CrearNoticiasBloc();
+        return _crearNoticiasBloc;
       },
-      child: BlocConsumer<MyNewsBloc, MyNewsState>(
+      child: BlocConsumer<CrearNoticiasBloc, CrearNoticiasState>(
         listener: (context, state) {
           if (state is PickedImageState) {
             slectedImage = state.image;
@@ -39,6 +39,8 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
                 ),
               );
           } else if (state is SavedNewState) {
+            BlocProvider.of<newsBloc.MyNewsBloc>(context)
+              .add(newsBloc.RequestAllNewsEvent());
             autorTc.clear();
             tituloTc.clear();
             descrTc.clear();
@@ -48,6 +50,14 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
               ..showSnackBar(
                 SnackBar(
                   content: Text("Noticia guardada.."),
+                ),
+              );
+          } else if (state is ErrorMessageState) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text("${state.errorMsg}"),
                 ),
               );
           }
@@ -112,14 +122,14 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
               child: Text("Imagen"),
               color: Colors.blueGrey,
               onPressed: () {
-                newsBloc.add(PickImageEvent());
+                _crearNoticiasBloc.add(PickImageEvent());
               },
             ),
             MaterialButton(
               child: Text("Guardar"),
               color: Colors.blueGrey,
               onPressed: () {
-                newsBloc.add(
+                _crearNoticiasBloc.add(
                   SaveNewElementEvent(
                     noticia: New(
                       isApi: false,

@@ -4,7 +4,7 @@ import 'package:google_login/bloc/auth_bloc.dart';
 import 'package:google_login/home/noticias_firebase/bloc/my_news_bloc.dart';
 import 'package:google_login/home/noticias_firebase/mis_noticias.dart';
 import 'noticias_ext_api/listado_noticias.dart';
-import 'package:google_login/home/noticias_firebase/nueva_noticia.dart';
+import 'package:google_login/home/nueva_noticia/nueva_noticia.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
