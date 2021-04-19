@@ -122,6 +122,7 @@ class _NuevaNoticiaState extends State<NuevaNoticia> {
                 newsBloc.add(
                   SaveNewElementEvent(
                     noticia: New(
+                      isApi: false,
                       author: autorTc.text,
                       title: tituloTc.text,
                       description: descrTc.text,

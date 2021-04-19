@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'source.dart';
 
 class New extends Equatable {
+  final bool isApi;
   final Source source;
   final String author;
   final String title;
@@ -13,6 +14,7 @@ class New extends Equatable {
   final String content;
 
   const New({
+    this.isApi,
     this.source,
     this.author,
     this.title,
@@ -25,7 +27,7 @@ class New extends Equatable {
 
   @override
   String toString() {
-    return 'New(source: $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content)';
+    return 'New(isApi: $isApi, $source, author: $author, title: $title, description: $description, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, content: $content)';
   }
 
   factory New.fromJson(Map<String, dynamic> json) {
@@ -42,11 +44,13 @@ class New extends Equatable {
           ? null
           : DateTime.parse(json['publishedAt'] as String),
       content: json['content'] as String,
+      isApi: json['isApi'] as bool,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'isApi' : isApi,
       'source': source?.toJson(),
       'author': author,
       'title': title,
@@ -59,6 +63,7 @@ class New extends Equatable {
   }
 
   New copyWith({
+    bool isApi,
     Source source,
     String author,
     String title,
@@ -69,6 +74,7 @@ class New extends Equatable {
     String content,
   }) {
     return New(
+      isApi : isApi ?? this.isApi,
       source: source ?? this.source,
       author: author ?? this.author,
       title: title ?? this.title,
@@ -83,6 +89,7 @@ class New extends Equatable {
   @override
   List<Object> get props {
     return [
+      isApi,
       source,
       author,
       title,

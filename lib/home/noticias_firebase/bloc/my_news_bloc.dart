@@ -37,14 +37,24 @@ class MyNewsBloc extends Bloc<MyNewsEvent, MyNewsState> {
       // 4) guardar elemento en firebase
       // 5) actualizar lista con RequestAllNewsEvent
       String imageUrl = await _uploadFile();
-      if (imageUrl != null) {
+
+      if(event.noticia.isApi) {
         yield LoadingState();
-        await _saveNoticias(event.noticia.copyWith(urlToImage: imageUrl));
-        // yield LoadedNewsState(noticiasList: await _getNoticias() ?? []);
+        await _saveNoticias(event.noticia);
         yield SavedNewState();
+
       } else {
-        yield ErrorMessageState(errorMsg: "No se pudo guardar la imagen");
+        if (imageUrl != null) {
+          yield LoadingState();
+          await _saveNoticias(event.noticia.copyWith(urlToImage: imageUrl));
+          // yield LoadedNewsState(noticiasList: await _getNoticias() ?? []);
+          yield SavedNewState();
+          
+        } else {
+          yield ErrorMessageState(errorMsg: "No se pudo guardar la imagen");
+        }
       }
+
     }
   }
 

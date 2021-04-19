@@ -123,6 +123,7 @@ class _ItemNoticiaState extends State<ItemNoticia> {
                     onPressed: () {
                       newsBloc.add(SaveNewElementEvent(
                           noticia: New(
+                              isApi: true,
                               author: (widget.noticia.author ??
                                   "Autor no disponible"),
                               title: widget.noticia.title,
