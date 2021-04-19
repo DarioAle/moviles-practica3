@@ -19,15 +19,13 @@ class NewsRepository {
     // https://newsapi.org/v2/top-headlines?country=mx&q=futbol&category=sports&apiKey&apiKey=laAPIkey
     // crear modelos antes
     if (query == null) {
-      query = "futbol";
+      query = "football";
     }
     final _uri = Uri(
       scheme: 'https',
       host: 'newsapi.org',
       path: 'v2/top-headlines',
       queryParameters: {
-        "country": "mx",
-        "category": "sports",
         "apiKey": apiKey,
         "q": query
       },

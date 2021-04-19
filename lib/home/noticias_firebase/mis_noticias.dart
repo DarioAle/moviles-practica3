@@ -13,6 +13,13 @@ class MisNoticias extends StatefulWidget {
 
 class _MisNoticiasState extends State<MisNoticias> {
   @override
+  void initState() {
+    BlocProvider.of<MyNewsBloc>(context).add(RequestAllNewsEvent());
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => MyNewsBloc()..add(RequestAllNewsEvent()),
@@ -34,10 +41,18 @@ class _MisNoticiasState extends State<MisNoticias> {
                   content: Text("${state.errorMsg}"),
                 ),
               );
+          } else if (state is SavedNewState) {
+            BlocProvider.of<MyNewsBloc>(context).add(RequestAllNewsEvent());
           }
         },
         builder: (context, state) {
           if (state is LoadedNewsState) {
+            state.noticiasList
+                .sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+            // state.noticiasList.forEach((element) {
+            //   print("-----" + element.publishedAt.toString());
+            //   print("");
+            //   });
             return RefreshIndicator(
               child: ListView.builder(
                 itemCount: state.noticiasList.length,
